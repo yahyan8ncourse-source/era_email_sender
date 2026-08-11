@@ -1,0 +1,17 @@
+﻿# migration strip
+node_modules/
+dist/
+dist-*/
+dist_installer/
+dist-release/
+dist-v*/
+release/
+*.exe
+*.msi
+*.zip
+*.mp4
+*.blockmap
+win-unpacked/
+.env
+.env.*
+!.env.example

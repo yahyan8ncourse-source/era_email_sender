@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ERA Formation — Envoi d'emails</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="login-screen" class="login-screen hidden">
+    <div class="login-card">
+      <div class="brand-mark">ERA</div>
+      <h1>Accès sécurisé</h1>
+      <p id="login-url-hint" class="login-url"></p>
+      <form id="login-form">
+        <input type="password" id="login-password" placeholder="Mot de passe" autocomplete="current-password" required />
+        <button type="button" class="btn btn-ghost btn-sm" id="toggle-password">Afficher</button>
+        <button type="submit" class="btn btn-primary">Connexion</button>
+      </form>
+      <p id="login-error" class="error-text hidden"></p>
+    </div>
+  </div>
+
+  <div id="app" class="app hidden">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-mark sm">ERA</div>
+        <div>
+          <strong>ERA Formation</strong>
+          <span>Envoi d'emails</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <button type="button" class="nav-item active" data-tab="compose">✉️ Nouveau message</button>
+        <button type="button" class="nav-item" data-tab="settings">⚙️ Paramètres</button>
+        <button type="button" class="nav-item" data-tab="guide">📋 Guide rapide</button>
+      </nav>
+      <div class="sidebar-footer">
+        <small>Expéditeur</small>
+        <strong id="from-display">—</strong>
+        <div id="quota-box" class="quota-box">
+          <small>Limite horaire</small>
+          <strong id="quota-display">—</strong>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h1 id="page-title">Nouveau message</h1>
+        </div>
+      </header>
+
+      <section id="tab-compose" class="tab-panel active">
+        <form id="email-form" class="compose-grid">
+          <div class="card card-recipients">
+            <div class="card-header">
+              <h2>1. Destinataires</h2>
+              <span id="recipient-count" class="badge">0 contact</span>
+            </div>
+            <label for="recipients">Adresses email</label>
+            <p class="hint">Une adresse par ligne, ou séparées par des virgules.</p>
+            <textarea id="recipients" rows="8" placeholder="client1@example.com&#10;client2@example.com"></textarea>
+            <div class="file-row">
+              <label class="file-btn">
+                📎 Importer CSV / TXT
+                <input type="file" id="csv-file" accept=".csv,.txt" hidden />
+              </label>
+              <button type="button" class="btn btn-ghost" id="clear-recipients">Effacer</button>
+            </div>
+          </div>
+
+          <div class="card card-message card-compose">
+            <div class="card-header">
+              <h2>2. Message</h2>
+              <span class="badge compose-badge">Éditeur enrichi</span>
+            </div>
+            <label for="subject">Objet</label>
+            <input type="text" id="subject" placeholder="Ex : Programme de formation — ERA Formation" required />
+
+            <label for="message-editor">Contenu</label>
+            <textarea id="message-editor"></textarea>
+
+            <div class="attachments-block">
+              <label class="file-btn">
+                📎 Joindre des fichiers
+                <input type="file" id="attach-files" multiple hidden />
+              </label>
+              <ul id="attachment-list" class="attachment-list"></ul>
+            </div>
+          </div>
+
+          <div class="card card-actions">
+            <div class="card-header">
+              <h2>3. Envoi</h2>
+            </div>
+            <p class="hint">Max <strong id="quota-hint">85</strong> emails/heure.</p>
+
+            <div id="resume-banner" class="resume-banner hidden">
+              <p>Envoi en pause — <strong id="resume-pending">0</strong> restant(s) · <span id="resume-subject"></span></p>
+              <div class="resume-actions">
+                <button type="button" class="btn btn-primary btn-sm" id="resume-send">Reprendre</button>
+                <button type="button" class="btn btn-ghost btn-sm" id="abandon-job">Abandonner</button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg" id="send-bulk">
+              🚀 Lancer l'envoi en masse
+            </button>
+            <button type="button" class="btn btn-ghost hidden" id="cancel-send">Arrêter</button>
+
+            <div id="progress-wrap" class="progress-wrap hidden">
+              <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+              <p id="progress-text" class="progress-text">0 / 0</p>
+            </div>
+
+            <div id="results" class="results hidden"></div>
+          </div>
+        </form>
+      </section>
+
+      <section id="tab-settings" class="tab-panel hidden">
+        <div class="card settings-card">
+          <h2>Paramètres email (SMTP)</h2>
+          <p class="hint">Ces informations permettent d'envoyer les emails depuis votre boîte ERA Formation.</p>
+          <form id="settings-form" class="settings-form">
+            <label for="set-from">Adresse expéditeur</label>
+            <input type="email" id="set-from" value="accidzco@acci-dz.com" />
+
+            <label for="set-reply-to">Adresses de réponse (Reply-To)</label>
+            <input
+              type="text"
+              id="set-reply-to"
+              value="B.bachir-eraforma@acci-dz.com, s.ammi@eraforma.com"
+              spellcheck="false"
+            />
+            <p class="hint">Les réponses des destinataires arrivent sur ces boîtes (séparez plusieurs adresses par une virgule).</p>
+
+            <label for="set-user">Utilisateur SMTP</label>
+            <input type="text" id="set-user" value="_mainaccount@acci-dz.com" />
+
+            <label for="set-pass">Mot de passe SMTP</label>
+            <div class="settings-pass-row">
+              <input type="password" id="set-pass" placeholder="Entrez le mot de passe SMTP" autocomplete="off" />
+              <button type="button" class="btn btn-ghost btn-sm" id="toggle-smtp-pass">Afficher</button>
+            </div>
+            <p class="hint">Mot de passe de la boîte email hébergée (fourni par votre hébergeur).</p>
+
+            <p id="settings-status" class="settings-status hidden"></p>
+
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+          </form>
+        </div>
+      </section>
+
+      <section id="tab-guide" class="tab-panel hidden">
+        <div class="card guide-card">
+          <h2>Guide rapide</h2>
+          <ol>
+            <li><strong>Destinataires</strong> — Collez vos emails ou importez un fichier CSV (1 colonne).</li>
+            <li><strong>Message</strong> — Rédigez avec l'éditeur (tableaux, couleurs, liens, images).</li>
+            <li><strong>Pièces jointes</strong> — Cliquez sur « Joindre des fichiers » (max 5, 5 Mo chacun).</li>
+            <li><strong>Envoi</strong> — Cliquez sur « Lancer l'envoi en masse ».</li>
+          </ol>
+          <div class="tips">
+            <h3>Bons réflexes</h3>
+            <ul>
+              <li>Maximum <strong id="quota-hint-guide">85</strong> emails par heure — envoi automatique heure par heure.</li>
+              <li>Listes longues (1000+) : l'application continue seule, sans relancer.</li>
+              <li>Tableaux : clic droit ou barre « Tableau » → propriétés cellule/ligne (couleurs, taille, bordures).</li>
+              <li>Évitez les mots spam : « GRATUIT », « URGENT », trop de majuscules ou de liens.</li>
+              <li>Utilisez un objet clair — ne répétez pas l'objet dans le corps du message.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+  <script src="vendor/tinymce/tinymce.min.js"></script>
+  <script src="js/app.js?v=17"></script>
+</body>
+</html>

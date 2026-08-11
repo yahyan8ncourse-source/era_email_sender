@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ERA Formation — Envoi d'emails</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="login-screen" class="login-screen hidden">
+    <div class="login-card">
+      <div class="brand-mark">ERA</div>
+      <h1>Accès sécurisé</h1>
+      <p id="login-url-hint" class="login-url"></p>
+      <form id="login-form">
+        <input type="password" id="login-password" placeholder="Mot de passe" autocomplete="current-password" required />
+        <button type="button" class="btn btn-ghost btn-sm" id="toggle-password">Afficher</button>
+        <button type="submit" class="btn btn-primary">Connexion</button>
+      </form>
+      <p id="login-error" class="error-text hidden"></p>
+    </div>
+  </div>
+
+  <div id="app" class="app hidden">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-mark sm">ERA</div>
+        <div>
+          <strong>ERA Formation</strong>
+          <span>Envoi d'emails</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <button type="button" class="nav-item active" data-tab="compose">✉️ Nouveau message</button>
+        <button type="button" class="nav-item" data-tab="guide">📋 Guide rapide</button>
+      </nav>
+      <div class="sidebar-footer">
+        <small>Expéditeur</small>
+        <strong id="from-display">—</strong>
+        <div id="quota-box" class="quota-box">
+          <small>Limite horaire</small>
+          <strong id="quota-display">—</strong>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h1 id="page-title">Nouveau message</h1>
+          <p class="subtitle">Envoyez des emails individuels ou en masse à vos contacts.</p>
+        </div>
+      </header>
+
+      <section id="tab-compose" class="tab-panel active">
+        <form id="email-form" class="compose-grid">
+          <div class="card card-recipients">
+            <div class="card-header">
+              <h2>1. Destinataires</h2>
+              <span id="recipient-count" class="badge">0 contact</span>
+            </div>
+            <label for="recipients">Adresses email</label>
+            <p class="hint">Une adresse par ligne, ou séparées par des virgules.</p>
+            <textarea id="recipients" rows="8" placeholder="client1@example.com&#10;client2@example.com"></textarea>
+            <div class="file-row">
+              <label class="file-btn">
+                📎 Importer CSV / TXT
+                <input type="file" id="csv-file" accept=".csv,.txt" hidden />
+              </label>
+              <button type="button" class="btn btn-ghost" id="clear-recipients">Effacer</button>
+            </div>
+          </div>
+
+          <div class="card card-message">
+            <div class="card-header">
+              <h2>2. Message</h2>
+            </div>
+            <label for="subject">Objet</label>
+            <input type="text" id="subject" placeholder="Ex : Programme de formation — ERA Formation" required />
+
+            <label for="message">Contenu</label>
+            <textarea id="message" rows="12" placeholder="Bonjour,&#10;&#10;Nous avons le plaisir de vous informer que..." required></textarea>
+
+            <div class="preview-box">
+              <div class="preview-label">Aperçu</div>
+              <div id="preview" class="preview-content"></div>
+            </div>
+          </div>
+
+          <div class="card card-actions">
+            <div class="card-header">
+              <h2>3. Envoi</h2>
+            </div>
+            <p class="hint">Max <strong id="quota-hint">5</strong> emails/heure (~12 min entre chaque envoi).</p>
+            <button type="submit" class="btn btn-primary btn-lg" id="send-bulk">
+              🚀 Lancer l'envoi en masse
+            </button>
+            <button type="button" class="btn btn-ghost hidden" id="cancel-send">Annuler</button>
+
+            <div id="progress-wrap" class="progress-wrap hidden">
+              <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+              <p id="progress-text" class="progress-text">0 / 0</p>
+            </div>
+
+            <div id="results" class="results hidden"></div>
+          </div>
+        </form>
+      </section>
+
+      <section id="tab-guide" class="tab-panel hidden">
+        <div class="card guide-card">
+          <h2>Guide rapide</h2>
+          <ol>
+            <li><strong>Destinataires</strong> — Collez vos emails ou importez un fichier CSV (1 colonne).</li>
+            <li><strong>Message</strong> — Rédigez l'objet et le contenu.</li>
+            <li><strong>Envoi</strong> — Cliquez sur « Lancer l'envoi en masse ».</li>
+          </ol>
+          <div class="tips">
+            <h3>Bons réflexes</h3>
+            <ul>
+              <li>Maximum <strong id="quota-hint-guide">5</strong> emails par heure (~12 min entre chaque envoi).</li>
+              <li>Évitez les mots spam : « GRATUIT », « URGENT », trop de majuscules.</li>
+              <li>Ne dépassez pas 50 destinataires par envoi.</li>
+              <li>Personnalisez l'objet pour vos campagnes.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+  <script src="js/app.js?v=4"></script>
+</body>
+</html>

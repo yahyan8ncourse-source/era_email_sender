@@ -1,0 +1,12 @@
+{
+  "name": "era-email-sender",
+  "version": "1.2.0",
+  "private": true,
+  "description": "ERA Formation bulk email sender (cPanel)",
+  "main": "server.js",
+  "scripts": {
+    "install": "node -e \"console.log('no dependencies')\"",
+    "start": "node server.js"
+  },
+  "dependencies": {}
+}

@@ -1,0 +1,51 @@
+{
+  "name": "era-email-sender",
+  "version": "1.5.4",
+  "private": true,
+  "description": "ERA Formation bulk email sender",
+  "author": "ERA Formation",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "node server.js",
+    "desktop": "electron .",
+    "dist": "electron-builder --win",
+    "test-email": "node send-test-email.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "nodemailer": "^6.9.16",
+    "tinymce": "^7.9.3"
+  },
+  "devDependencies": {
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.eraformation.emailsender",
+    "productName": "ERA Email Sender",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "electron/**/*",
+      "lib/**/*",
+      "public/**/*",
+      "server.js",
+      "package.json",
+      ".env.example"
+    ],
+    "asarUnpack": [
+      "public/**"
+    ],
+    "win": {
+      "target": "nsis",
+      "sign": false,
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}
